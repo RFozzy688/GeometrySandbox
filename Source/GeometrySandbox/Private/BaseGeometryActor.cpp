@@ -36,11 +36,7 @@ void ABaseGeometryActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FVector CurrentLocation = GetActorLocation();
-	float time = GetWorld()->GetTimeSeconds(); // GetWorld() - указатель на глобальный объект мира игры, который есть у каждого актора
-	                                           // GetTimeSeconds() - кол-во секунд прошедшие с момента старта игры
-	CurrentLocation.Z = InitialLocation.Z + Amplitude * FMath::Sin(Frequency * time);
-	SetActorLocation(CurrentLocation); // меняет текущее положение Актора в мире
+	HandleMovement();
 }
 
 void ABaseGeometryActor::printTypes()
@@ -89,5 +85,25 @@ void ABaseGeometryActor::printTransform()
 	UE_LOG(LogBaseGeometry, Warning, TEXT("Scale %s"), *Scale.ToString());
 
 	UE_LOG(LogBaseGeometry, Error, TEXT("Human Transform %s"), *Transform.ToHumanReadableString()/*преобразование в более информативную строку*/);
+}
+
+void ABaseGeometryActor::HandleMovement()
+{
+	switch (GeometryData.MoveType)
+	{
+	case EMovementType::Sin:
+	{
+		FVector CurrentLocation = GetActorLocation();
+		float time = GetWorld()->GetTimeSeconds(); // GetWorld() - указатель на глобальный объект мира игры, который есть у каждого актора
+												   // GetTimeSeconds() - кол-во секунд прошедшие с момента старта игры
+		CurrentLocation.Z = InitialLocation.Z + GeometryData.Amplitude * FMath::Sin(GeometryData.Frequency * time);
+		SetActorLocation(CurrentLocation); // меняет текущее положение Актора в мире
+	}
+	break;
+	case EMovementType::Static:
+		break;
+	default:
+		break;
+	}
 }
 
