@@ -4,6 +4,7 @@
 #include "BaseGeometryActor.h"
 #include "Engine/Engine.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "TimerManager.h"
 
 // собственна€ категори€ логировани€
 // данный макрос отвечает за создание локальной категори€ логировани€
@@ -32,6 +33,9 @@ void ABaseGeometryActor::BeginPlay()
 	//printTransform();
 
 	SetColor(GeometryData.Color);
+
+	// данна€ ф-ци€ возвращает объкт TimerManager
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ABaseGeometryActor::OnTimerFired, GeometryData.TimerRate, true);
 }
 
 // Called every frame 
@@ -119,6 +123,20 @@ void ABaseGeometryActor::SetColor(const FLinearColor& Color)
 	{
 		// устанавливает цвет в параметр
 		DynMaterial->SetVectorParameterValue("Color", Color);
+	}
+}
+
+void ABaseGeometryActor::OnTimerFired()
+{
+	if (++TimerCount <= ManTimerCount)
+	{
+		const FLinearColor NewColor = FLinearColor::MakeRandomColor(); // устанавливает рандомный цвет
+		UE_LOG(LogBaseGeometry, Display, TEXT("Color to set up: %s"), *NewColor.ToString());
+		SetColor(NewColor);
+	}
+	else
+	{
+		GetWorldTimerManager().ClearTimer(TimerHandle);
 	}
 }
 
