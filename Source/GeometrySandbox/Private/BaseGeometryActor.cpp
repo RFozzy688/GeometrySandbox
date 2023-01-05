@@ -15,6 +15,8 @@ ABaseGeometryActor::ABaseGeometryActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>("BaseMesh");
+	SetRootComponent(BaseMesh);
 }
 
 // Called when the game starts or when spawned
@@ -22,10 +24,11 @@ void ABaseGeometryActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	InitialLocation = GetActorLocation(); // положение Актора впространстве
 
-
-	printTypes();
+	//printTypes();
 	//printStringTypes();
+	//printTransform();
 }
 
 // Called every frame
@@ -33,6 +36,11 @@ void ABaseGeometryActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FVector CurrentLocation = GetActorLocation();
+	float time = GetWorld()->GetTimeSeconds(); // GetWorld() - указатель на глобальный объект мира игры, который есть у каждого актора
+	                                           // GetTimeSeconds() - кол-во секунд прошедшие с момента старта игры
+	CurrentLocation.Z = InitialLocation.Z + Amplitude * FMath::Sin(Frequency * time);
+	SetActorLocation(CurrentLocation); // меняет текущее положение Актора в мире
 }
 
 void ABaseGeometryActor::printTypes()
@@ -65,5 +73,21 @@ void ABaseGeometryActor::printStringTypes()
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, Name);
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, Stat, true, FVector2D(1.5f, 1.5f));
+}
+
+void ABaseGeometryActor::printTransform()
+{
+	FTransform Transform = GetActorTransform();
+	FVector Location = Transform.GetLocation();
+	FRotator Rotation = Transform.Rotator();
+	FVector Scale = Transform.GetScale3D();
+
+	UE_LOG(LogBaseGeometry, Warning, TEXT("Actor name %s"), *GetName());
+	UE_LOG(LogBaseGeometry, Warning, TEXT("Transform %s"), *Transform.ToString()/*преобразование в строку*/);
+	UE_LOG(LogBaseGeometry, Warning, TEXT("Location %s"), *Location.ToString());
+	UE_LOG(LogBaseGeometry, Warning, TEXT("Rotator %s"), *Rotation.ToString());
+	UE_LOG(LogBaseGeometry, Warning, TEXT("Scale %s"), *Scale.ToString());
+
+	UE_LOG(LogBaseGeometry, Error, TEXT("Human Transform %s"), *Transform.ToHumanReadableString()/*преобразование в более информативную строку*/);
 }
 
