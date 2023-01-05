@@ -24,7 +24,7 @@ void ABaseGeometryActor::BeginPlay()
 	
 
 
-	//printTypes();
+	printTypes();
 	//printStringTypes();
 }
 
@@ -37,20 +37,15 @@ void ABaseGeometryActor::Tick(float DeltaTime)
 
 void ABaseGeometryActor::printTypes()
 {
-	UE_LOG(LogTemp, Display, TEXT("Hello Unreal"));
-	UE_LOG(LogTemp, Warning, TEXT("Hello Unreal"));
-	UE_LOG(LogTemp, Error, TEXT("Hello Unreal"));
+	//UE_LOG(LogTemp, Display, TEXT("Hello Unreal"));
+	//UE_LOG(LogTemp, Warning, TEXT("Hello Unreal"));
+	//UE_LOG(LogTemp, Error, TEXT("Hello Unreal"));
 
-	int WeaponsNum = 4;
-	int KillNum = 7;
-	float Health = 34.564322f;
-	bool IsDead = false;
-	bool HasWeapon = true;
-
-	UE_LOG(LogTemp, Display, TEXT("Weapons Num: %d, Kill Num: %i"), WeaponsNum, KillNum);
-	UE_LOG(LogTemp, Display, TEXT("Health: %f"), Health);
-	UE_LOG(LogTemp, Display, TEXT("Health: %.2f"), Health);
-	UE_LOG(LogTemp, Display, TEXT("IsDead: %d, HasWeapon: %d"), IsDead, static_cast<int>(HasWeapon));
+	// каждый јктор имеет GetName(). Ёта ф-ци€ возращает им€ текущего инстанса јктора
+	UE_LOG(LogBaseGeometry, Warning, TEXT("Actor name %s"), *GetName());
+	UE_LOG(LogBaseGeometry, Warning, TEXT("Weapons Num: %d, Kill Num: %i"), WeaponsNum, KillNum);
+	UE_LOG(LogBaseGeometry, Warning, TEXT("Health: %f"), Health);
+	UE_LOG(LogBaseGeometry, Warning, TEXT("IsDead: %d, HasWeapon: %d"), IsDead, static_cast<int>(HasWeapon));
 }
 
 void ABaseGeometryActor::printStringTypes()
@@ -58,9 +53,6 @@ void ABaseGeometryActor::printStringTypes()
 	FString Name = "John Connor";
 	UE_LOG(LogBaseGeometry, Display, TEXT("Name: %s"), *Name);
 
-	int WeaponsNum = 4;
-	float Health = 34.564322f;
-	bool IsDead = false;
 	                                           // переобразовует из int-a в тип FString
 	FString WeaponsNumStr = "Weapons Num = " + FString::FromInt(WeaponsNum);
 	                                   // из float-a в тип FString  
