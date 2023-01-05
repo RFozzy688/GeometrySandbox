@@ -3,6 +3,7 @@
 
 #include "BaseGeometryActor.h"
 #include "Engine/Engine.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 // собственная категория логирования
 // данный макрос отвечает за создание локальной категория логирования
@@ -29,9 +30,11 @@ void ABaseGeometryActor::BeginPlay()
 	//printTypes();
 	//printStringTypes();
 	//printTransform();
+
+	SetColor(GeometryData.Color);
 }
 
-// Called every frame
+// Called every frame 
 void ABaseGeometryActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -104,6 +107,18 @@ void ABaseGeometryActor::HandleMovement()
 		break;
 	default:
 		break;
+	}
+}
+
+void ABaseGeometryActor::SetColor(const FLinearColor& Color)
+{
+	// на основе обычного материала создаёт инстанс материала, устанавливает компоненту и возвращает указатель
+	UMaterialInstanceDynamic* DynMaterial = BaseMesh->CreateAndSetMaterialInstanceDynamic(0);
+
+	if (DynMaterial)
+	{
+		// устанавливает цвет в параметр
+		DynMaterial->SetVectorParameterValue("Color", Color);
 	}
 }
 
