@@ -35,6 +35,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ABaseGeometryActor> GeometryClass;
 
@@ -50,4 +52,8 @@ private:
 	void DoActorSpawn2();
 	void DoActorSpawn3();
 
+	UFUNCTION()
+	void OnColorChanged(const FLinearColor& Color, const FString& Name);
+
+	void OnTimerFinished(AActor* Actor);
 };
