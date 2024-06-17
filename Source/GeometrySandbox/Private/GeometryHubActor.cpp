@@ -21,7 +21,7 @@ void AGeometryHubActor::BeginPlay()
     
     //DoActorSpawn1();
     //DoActorSpawn2();
-    DoActorSpawn3();
+    //DoActorSpawn3();
     
 }
 
