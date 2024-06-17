@@ -4,6 +4,7 @@
 #include "BaseGeometryActor.h"
 #include "Engine/Engine.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "TimerManager.h"
 
 // создает локальную категорию логирования
 DEFINE_LOG_CATEGORY_STATIC(LogBaseGeometry, All, All);
@@ -26,6 +27,13 @@ void ABaseGeometryActor::BeginPlay()
     InitialLocation = GetActorLocation();
 
     SetColor(GeometryData.Color);
+
+    GetWorldTimerManager().SetTimer(
+        TimerHandle, 
+        this, 
+        &ABaseGeometryActor::OnTimerFired, 
+        GeometryData.TimerRate, 
+        true);
     
     // PrintTransform();
     //PrintTypes();
@@ -107,6 +115,19 @@ void ABaseGeometryActor::SetColor(const FLinearColor& Color)
     if (DynMaterial)
     {
         DynMaterial->SetVectorParameterValue("Color", Color);
+    }
+}
+
+void ABaseGeometryActor::OnTimerFired() 
+{
+    if (++TimerCount <= MaxTimerCount)
+    {
+        const FLinearColor NewColor = FLinearColor::MakeRandomColor();
+        SetColor(NewColor);
+    }
+    else
+    {
+        GetWorldTimerManager().ClearTimer(TimerHandle);
     }
 }
 
